@@ -1,7 +1,8 @@
-package edu.mirea.onebeattrue.hangoutapp
+package edu.mirea.onebeattrue.hangoutapp.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import edu.mirea.onebeattrue.hangoutapp.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
