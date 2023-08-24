@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">HangOutApp</string>
+    <string name="event_list_title">Мероприятия</string>
+    <string name="invite_list_title">Приглашения</string>
+    <string name="map_title">Карта</string>
+    <string name="profile_title">Профиль</string>
 </resources>
