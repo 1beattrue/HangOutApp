@@ -1,24 +1,23 @@
-package edu.mirea.onebeattrue.hangoutapp.presentation
+package edu.mirea.onebeattrue.hangoutapp.presentation.map
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import edu.mirea.onebeattrue.hangoutapp.databinding.FragmentEventListBinding
-import edu.mirea.onebeattrue.hangoutapp.databinding.FragmentProfileBinding
+import edu.mirea.onebeattrue.hangoutapp.databinding.FragmentMapBinding
 
-class ProfileFragment: Fragment() {
-    private var _binding: FragmentProfileBinding? = null
-    private val binding: FragmentProfileBinding
-        get() = _binding ?: throw RuntimeException("FragmentProfileBinding = null")
+class MapFragment: Fragment() {
+    private var _binding: FragmentMapBinding? = null
+    private val binding: FragmentMapBinding
+        get() = _binding ?: throw RuntimeException("FragmentMapBinding = null")
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentProfileBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentMapBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 

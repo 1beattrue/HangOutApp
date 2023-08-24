@@ -13,7 +13,8 @@
         android:theme="@style/Theme.HangOutApp"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.MainActivity"
+            android:screenOrientation="portrait"
+            android:name=".presentation.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

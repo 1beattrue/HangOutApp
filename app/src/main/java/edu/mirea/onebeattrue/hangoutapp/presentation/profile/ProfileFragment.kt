@@ -1,23 +1,24 @@
-package edu.mirea.onebeattrue.hangoutapp.presentation
+package edu.mirea.onebeattrue.hangoutapp.presentation.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import edu.mirea.onebeattrue.hangoutapp.databinding.FragmentInviteListBinding
+import edu.mirea.onebeattrue.hangoutapp.databinding.FragmentEventListBinding
+import edu.mirea.onebeattrue.hangoutapp.databinding.FragmentProfileBinding
 
-class InviteListFragment: Fragment() {
-    private var _binding: FragmentInviteListBinding? = null
-    private val binding: FragmentInviteListBinding
-        get() = _binding ?: throw RuntimeException("FragmentInviteListBinding = null")
+class ProfileFragment: Fragment() {
+    private var _binding: FragmentProfileBinding? = null
+    private val binding: FragmentProfileBinding
+        get() = _binding ?: throw RuntimeException("FragmentProfileBinding = null")
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentInviteListBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentProfileBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
