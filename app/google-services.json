@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "443027600591",
+    "project_id": "hangoutapp-c41cd",
+    "storage_bucket": "hangoutapp-c41cd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:443027600591:android:8cca5d44e94c66da0d73ba",
+        "android_client_info": {
+          "package_name": "edu.mirea.onebeattrue.hangoutapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "443027600591-1khemujheg0rof5atju3r3dd1f6elv19.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2RnBAViL6kebG2Wgo7mfRbcV0ySkRIp4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "443027600591-1khemujheg0rof5atju3r3dd1f6elv19.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

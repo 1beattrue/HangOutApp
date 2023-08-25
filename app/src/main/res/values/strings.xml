@@ -13,4 +13,5 @@
     <string name="login">Авторизация</string>
     <string name="login_button">Войти</string>
     <string name="login_to_register">Нет аккаунта? Нажмите, чтобы зарегистрироваться</string>
+    <string name="email">Электронная почта</string>
 </resources>
