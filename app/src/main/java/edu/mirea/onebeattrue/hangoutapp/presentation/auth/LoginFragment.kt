@@ -25,8 +25,8 @@ class LoginFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvLogin.setOnClickListener {
-            launchMainFragment()
+        binding.tvLoginToRegister.setOnClickListener {
+            launchRegisterFragment()
         }
     }
 
@@ -37,5 +37,9 @@ class LoginFragment: Fragment() {
 
     private fun launchMainFragment() {
         findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToMainFragment())
+    }
+
+    private fun launchRegisterFragment() {
+        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
     }
 }

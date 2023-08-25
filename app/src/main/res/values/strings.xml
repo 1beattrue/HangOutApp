@@ -4,4 +4,13 @@
     <string name="invite_list_title">Приглашения</string>
     <string name="map_title">Карта</string>
     <string name="profile_title">Профиль</string>
+    <string name="register">Регистрация</string>
+    <string name="username">Никнейм</string>
+    <string name="phone_number">Номер телефона</string>
+    <string name="password">Пароль</string>
+    <string name="register_button">Зарегистрироваться</string>
+    <string name="register_to_login">Уже зарегистрированы? Нажмите, чтобы войти</string>
+    <string name="login">Авторизация</string>
+    <string name="login_button">Войти</string>
+    <string name="login_to_register">Нет аккаунта? Нажмите, чтобы зарегистрироваться</string>
 </resources>
