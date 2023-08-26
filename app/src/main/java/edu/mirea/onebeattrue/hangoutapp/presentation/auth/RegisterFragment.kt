@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -42,7 +43,10 @@ class RegisterFragment: Fragment() {
             viewModel.signUp(
                 username = binding.etUsername.text.toString(),
                 email = binding.etEmail.text.toString(),
-                password = binding.etPassword.text.toString()
+                password = binding.etPassword.text.toString(),
+                onErrorCallback = {
+                    Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+                }
             )
         }
 
@@ -87,12 +91,12 @@ class RegisterFragment: Fragment() {
             }
         })
 
-        binding.etPassword.addTextChangedListener(object : TextWatcher {
+        binding.etUsername.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetErrorInputPassword()
+                viewModel.resetErrorInputUsername()
             }
 
             override fun afterTextChanged(p0: Editable?) {

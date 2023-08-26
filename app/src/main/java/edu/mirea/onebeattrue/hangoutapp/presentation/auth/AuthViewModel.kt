@@ -50,7 +50,7 @@ class AuthViewModel : ViewModel() {
     private val signUpUseCase = SignUpUseCase(repository)
     private val logOutUseCase = LogOutUseCase(repository)
 
-    fun logIn(email: String, password: String) {
+    fun logIn(email: String, password: String, onErrorCallback: (String) -> Unit) {
         val fieldsValid = isValidEmail(email) && isValidPassword(password)
         if (fieldsValid) {
             viewModelScope.launch {
@@ -61,6 +61,7 @@ class AuthViewModel : ViewModel() {
                         finishAuthorization()
                     } else {
                         Log.d("AuthViewModel", it.exception?.message!!)
+                        onErrorCallback(it.exception?.message!!)
                     }
                 }
                 _progressBarVisibility.postValue(false)
@@ -68,7 +69,7 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    fun signUp(username: String, email: String, password: String) {
+    fun signUp(username: String, email: String, password: String, onErrorCallback: (String) -> Unit) {
         val fieldsValid = isValidUsername(username) && isValidEmail(email) && isValidPassword(password)
         if (fieldsValid) {
             viewModelScope.launch {
@@ -79,6 +80,7 @@ class AuthViewModel : ViewModel() {
                         finishAuthorization()
                     } else {
                         Log.d("AuthViewModel", it.exception?.message!!)
+                        onErrorCallback(it.exception?.message!!)
                     }
                 }
                 _progressBarVisibility.postValue(false)
@@ -103,8 +105,9 @@ class AuthViewModel : ViewModel() {
     }
 
     private fun isValidUsername(username: String): Boolean {
-        // TODO(): добавить проверку имени пользователя
-        return true
+        val result = username.length <= 30
+        if (!result) _errorInputUsername.value = true
+        return result
     }
 
     private fun isValidEmail(email: String): Boolean {

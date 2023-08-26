@@ -42,7 +42,10 @@ class LoginFragment: Fragment() {
         binding.btnLogin.setOnClickListener {
             viewModel.logIn(
                 email = binding.etEmail.text.toString(),
-                password = binding.etPassword.text.toString()
+                password = binding.etPassword.text.toString(),
+                onErrorCallback = {
+                    Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+                }
             )
         }
 

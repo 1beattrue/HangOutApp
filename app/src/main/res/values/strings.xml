@@ -16,5 +16,5 @@
     <string name="email">Электронная почта</string>
     <string name="error_input_email">Неверный формат электронной почты</string>
     <string name="error_input_password">Пароль должен содержать не менее 8 символов</string>
-    <string name="error_input_username">я временная надпись, поменяй меня!</string>
+    <string name="error_input_username">Никнейм должен содержать не более 30 символов</string>
 </resources>
