@@ -59,13 +59,14 @@ class AuthViewModel : ViewModel() {
                     if (it.isSuccessful) {
                         Log.d("AuthViewModel", "signInWithEmail:success")
                         finishAuthorization()
+                        _progressBarVisibility.value = false
                     } else {
                         Log.d("AuthViewModel", it.exception?.message!!)
                         onErrorCallback(it.exception?.message!!)
+                        _progressBarVisibility.value = false
                     }
                 }
             }
-            _progressBarVisibility.value = false
         }
     }
 
@@ -78,13 +79,14 @@ class AuthViewModel : ViewModel() {
                     if (it.isSuccessful) {
                         Log.d("AuthViewModel", "signInWithEmail:success")
                         finishAuthorization()
+                        _progressBarVisibility.value = false
                     } else {
                         Log.d("AuthViewModel", it.exception?.message!!)
                         onErrorCallback(it.exception?.message!!)
+                        _progressBarVisibility.value = false
                     }
                 }
             }
-            _progressBarVisibility.value = false
         }
     }
 

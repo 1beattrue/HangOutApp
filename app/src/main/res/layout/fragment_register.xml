@@ -84,7 +84,7 @@
             android:text="@string/register_to_login" />
 
         <ProgressBar
-            android:visibility="gone"
+            app:progressBarVisibility="@{viewModel.progressBarVisibility}"
             android:id="@+id/progressBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
