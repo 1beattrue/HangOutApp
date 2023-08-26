@@ -5,6 +5,7 @@ plugins {
     id("androidx.navigation.safeargs")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -42,9 +43,17 @@ android {
 }
 
 dependencies {
-    implementation("com.google.dagger:dagger:2.44")
-    kapt("com.google.dagger:dagger-compiler:2.28.3")
 
+    // Dagger Core
+    implementation("com.google.dagger:dagger:2.44")
+    kapt("com.google.dagger:dagger-compiler:2.44")
+
+    // Dagger Android
+    api("com.google.dagger:dagger-android:2.37")
+    api("com.google.dagger:dagger-android-support:2.37")
+    kapt("com.google.dagger:dagger-android-processor:2.37")
+
+    // Dagger - Hilt
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
 

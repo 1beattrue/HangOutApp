@@ -2,6 +2,8 @@ package edu.mirea.onebeattrue.hangoutapp.presentation.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 import edu.mirea.onebeattrue.hangoutapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
