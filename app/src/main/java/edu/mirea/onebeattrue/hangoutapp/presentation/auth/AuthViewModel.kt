@@ -53,8 +53,8 @@ class AuthViewModel : ViewModel() {
     fun logIn(email: String, password: String, onErrorCallback: (String) -> Unit) {
         val fieldsValid = isValidEmail(email) && isValidPassword(password)
         if (fieldsValid) {
+            _progressBarVisibility.value = true
             viewModelScope.launch {
-                _progressBarVisibility.postValue(true)
                 logInUseCase(email, password) {
                     if (it.isSuccessful) {
                         Log.d("AuthViewModel", "signInWithEmail:success")
@@ -64,16 +64,16 @@ class AuthViewModel : ViewModel() {
                         onErrorCallback(it.exception?.message!!)
                     }
                 }
-                _progressBarVisibility.postValue(false)
             }
+            _progressBarVisibility.value = false
         }
     }
 
     fun signUp(username: String, email: String, password: String, onErrorCallback: (String) -> Unit) {
         val fieldsValid = isValidUsername(username) && isValidEmail(email) && isValidPassword(password)
         if (fieldsValid) {
+            _progressBarVisibility.value = true
             viewModelScope.launch {
-                _progressBarVisibility.postValue(true)
                 signUpUseCase(username, email, password) {
                     if (it.isSuccessful) {
                         Log.d("AuthViewModel", "signInWithEmail:success")
@@ -83,8 +83,8 @@ class AuthViewModel : ViewModel() {
                         onErrorCallback(it.exception?.message!!)
                     }
                 }
-                _progressBarVisibility.postValue(false)
             }
+            _progressBarVisibility.value = false
         }
     }
 
