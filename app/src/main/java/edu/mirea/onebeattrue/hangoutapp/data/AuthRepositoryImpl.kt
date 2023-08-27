@@ -27,7 +27,7 @@ class AuthRepositoryImpl(
                 authResult = task
             }
         while (authResult == null) {
-            delay(1000)
+            delay(500)
             continue
         }
         return authResult!!
@@ -44,12 +44,12 @@ class AuthRepositoryImpl(
                 authResult = task
             }
         while (authResult == null) {
-            delay(1000)
+            delay(500)
             continue
         }
         if (authResult!!.isSuccessful) {
             while (currentUser == null) { // TODO: подумать чо сделать с этим говнокодом (но учесть, что это работает достаточно неплохо)
-                delay(1000)
+                delay(500)
                 continue
             }
             val profileUpdate = UserProfileChangeRequest.Builder().setDisplayName(username).build()
