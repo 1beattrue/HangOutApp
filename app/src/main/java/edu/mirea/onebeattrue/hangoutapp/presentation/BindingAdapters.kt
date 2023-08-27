@@ -1,4 +1,4 @@
-package edu.mirea.onebeattrue.hangoutapp.presentation.auth
+package edu.mirea.onebeattrue.hangoutapp.presentation
 
 import android.view.View
 import android.widget.ProgressBar
@@ -6,6 +6,11 @@ import androidx.databinding.BindingAdapter
 import com.google.android.material.textfield.TextInputLayout
 import edu.mirea.onebeattrue.hangoutapp.R
 
+/**
+ * fragment_register
+ *
+ * fragment_login
+ */
 @BindingAdapter("emailError")
 fun bindEmailError(textInputLayout: TextInputLayout, errorInputEmail: Boolean) {
     val message = if (errorInputEmail) {
