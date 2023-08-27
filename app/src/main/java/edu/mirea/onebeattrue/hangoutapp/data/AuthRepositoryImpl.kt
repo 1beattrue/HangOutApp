@@ -14,48 +14,51 @@ import kotlinx.coroutines.launch
 class AuthRepositoryImpl(
     private val firebaseAuth: FirebaseAuth
 ) : AuthRepository {
-    private val coroutineScope = CoroutineScope(Dispatchers.Main)
-
     override val currentUser: FirebaseUser?
         get() = firebaseAuth.currentUser
 
     override suspend fun logIn(
         email: String,
-        password: String,
-        callback: (Task<AuthResult>) -> Unit
-    ) {
+        password: String
+    ): Task<AuthResult> {
+        var authResult: Task<AuthResult>? = null
         firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                callback(task)
+                authResult = task
             }
+        while (authResult == null) {
+            delay(1000)
+            continue
+        }
+        return authResult!!
     }
 
     override suspend fun signUp(
         username: String,
         email: String,
-        password: String,
-        callback: (Task<AuthResult>) -> Unit
-    ) {
+        password: String
+    ): Task<AuthResult> {
+        var authResult: Task<AuthResult>? = null
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                callback(task)
-                coroutineScope.launch {
-                    if (task.isSuccessful) {
-                        while (true) {
-                            if (currentUser != null) {
-                                val profileUpdate = UserProfileChangeRequest.Builder().setDisplayName(username).build()
-                                currentUser!!.updateProfile(profileUpdate)
-                                break
-                                // TODO: подумать чо сделать с этим говнокодом (но учесть, что это работает достаточно неплохо)
-                            }
-                        }
-                    }
-                }
+                authResult = task
             }
+        while (authResult == null) {
+            delay(1000)
+            continue
+        }
+        if (authResult!!.isSuccessful) {
+            while (currentUser == null) { // TODO: подумать чо сделать с этим говнокодом (но учесть, что это работает достаточно неплохо)
+                delay(1000)
+                continue
+            }
+            val profileUpdate = UserProfileChangeRequest.Builder().setDisplayName(username).build()
+            currentUser!!.updateProfile(profileUpdate)
+        }
+        return authResult!!
     }
 
     override fun logOut() {
         firebaseAuth.signOut()
     }
-
 }

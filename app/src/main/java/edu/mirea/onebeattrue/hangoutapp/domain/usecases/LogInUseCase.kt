@@ -6,7 +6,7 @@ import com.google.firebase.auth.FirebaseUser
 import edu.mirea.onebeattrue.hangoutapp.domain.AuthRepository
 
 class LogInUseCase(private val repository: AuthRepository) {
-    suspend operator fun invoke(email: String, password: String, callback: (Task<AuthResult>) -> Unit) {
-        return repository.logIn(email, password, callback)
+    suspend operator fun invoke(email: String, password: String): Task<AuthResult> {
+        return repository.logIn(email, password)
     }
 }

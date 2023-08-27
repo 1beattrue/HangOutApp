@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import edu.mirea.onebeattrue.hangoutapp.databinding.FragmentRegisterBinding
 
-class RegisterFragment: Fragment() {
+class RegisterFragment : Fragment() {
     private val viewModel: AuthViewModel by lazy {
         ViewModelProvider(this)[AuthViewModel::class.java]
     }
@@ -43,10 +43,7 @@ class RegisterFragment: Fragment() {
             viewModel.signUp(
                 username = binding.etUsername.text.toString(),
                 email = binding.etEmail.text.toString(),
-                password = binding.etPassword.text.toString(),
-                onErrorCallback = {
-                    Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
-                }
+                password = binding.etPassword.text.toString()
             )
         }
 
@@ -61,8 +58,13 @@ class RegisterFragment: Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.shouldFinishAuthorization.observe(viewLifecycleOwner) {
-            launchLoginFragment()
+        with(viewModel) {
+            shouldFinishAuthorization.observe(viewLifecycleOwner) {
+                launchLoginFragment()
+            }
+            authError.observe(viewLifecycleOwner) { message ->
+                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -78,7 +80,6 @@ class RegisterFragment: Fragment() {
             override fun afterTextChanged(p0: Editable?) {
             }
         })
-
         binding.etPassword.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
@@ -90,7 +91,6 @@ class RegisterFragment: Fragment() {
             override fun afterTextChanged(p0: Editable?) {
             }
         })
-
         binding.etUsername.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }

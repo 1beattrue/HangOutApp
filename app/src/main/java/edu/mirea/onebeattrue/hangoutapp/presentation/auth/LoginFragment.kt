@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import edu.mirea.onebeattrue.hangoutapp.databinding.FragmentLoginBinding
 
-class LoginFragment: Fragment() {
+class LoginFragment : Fragment() {
     private val viewModel: AuthViewModel by lazy {
         ViewModelProvider(this)[AuthViewModel::class.java]
     }
@@ -42,10 +42,7 @@ class LoginFragment: Fragment() {
         binding.btnLogin.setOnClickListener {
             viewModel.logIn(
                 email = binding.etEmail.text.toString(),
-                password = binding.etPassword.text.toString(),
-                onErrorCallback = {
-                    Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
-                }
+                password = binding.etPassword.text.toString()
             )
         }
 
@@ -67,8 +64,13 @@ class LoginFragment: Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.shouldFinishAuthorization.observe(viewLifecycleOwner) {
-            launchMainFragment()
+        with(viewModel) {
+            shouldFinishAuthorization.observe(viewLifecycleOwner) {
+                launchMainFragment()
+            }
+            authError.observe(viewLifecycleOwner) { message ->
+                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -84,7 +86,6 @@ class LoginFragment: Fragment() {
             override fun afterTextChanged(p0: Editable?) {
             }
         })
-
         binding.etPassword.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }

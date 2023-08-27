@@ -1,7 +1,6 @@
 package edu.mirea.onebeattrue.hangoutapp.presentation.auth
 
 import android.util.Log
-import android.view.View
 import androidx.core.util.PatternsCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,7 +12,6 @@ import edu.mirea.onebeattrue.hangoutapp.data.AuthRepositoryImpl
 import edu.mirea.onebeattrue.hangoutapp.domain.usecases.LogInUseCase
 import edu.mirea.onebeattrue.hangoutapp.domain.usecases.LogOutUseCase
 import edu.mirea.onebeattrue.hangoutapp.domain.usecases.SignUpUseCase
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 //@HiltViewModel
@@ -22,6 +20,10 @@ import kotlinx.coroutines.launch
 //) : ViewModel() {
 
 class AuthViewModel : ViewModel() {
+    private var _authError = MutableLiveData<String>()
+    val authError: LiveData<String>
+        get() = _authError
+
     private var _shouldFinishAuthorization = MutableLiveData<Unit>()
     val shouldFinishAuthorization: LiveData<Unit>
         get() = _shouldFinishAuthorization
@@ -42,7 +44,8 @@ class AuthViewModel : ViewModel() {
     val progressBarVisibility: LiveData<Boolean>
         get() = _progressBarVisibility
 
-    private val repository = AuthRepositoryImpl(FirebaseAuth.getInstance()) // TODO: разобраться с dagger и убрать это убожество
+    private val repository =
+        AuthRepositoryImpl(FirebaseAuth.getInstance()) // TODO: разобраться с dagger и убрать это убожество
 
     val currentUser: FirebaseUser?
         get() = repository.currentUser
@@ -50,42 +53,40 @@ class AuthViewModel : ViewModel() {
     private val signUpUseCase = SignUpUseCase(repository)
     private val logOutUseCase = LogOutUseCase(repository)
 
-    fun logIn(email: String, password: String, onErrorCallback: (String) -> Unit) {
+    fun logIn(email: String, password: String) {
         val fieldsValid = isValidEmail(email) && isValidPassword(password)
         if (fieldsValid) {
             _progressBarVisibility.value = true
             viewModelScope.launch {
-                logInUseCase(email, password) {
-                    if (it.isSuccessful) {
-                        Log.d("AuthViewModel", "signInWithEmail:success")
-                        finishAuthorization()
-                        _progressBarVisibility.value = false
-                    } else {
-                        Log.d("AuthViewModel", it.exception?.message!!)
-                        onErrorCallback(it.exception?.message!!)
-                        _progressBarVisibility.value = false
-                    }
+                val result = logInUseCase(email, password)
+                if (result.isSuccessful) {
+                    Log.d("AuthViewModel", "logIn:success")
+                    finishAuthorization()
+                } else {
+                    Log.d("AuthViewModel", result.exception?.message!!)
+                    showAuthorizationError(result.exception?.message!!)
                 }
+                _progressBarVisibility.value = false
             }
         }
     }
 
-    fun signUp(username: String, email: String, password: String, onErrorCallback: (String) -> Unit) {
-        val fieldsValid = isValidUsername(username) && isValidEmail(email) && isValidPassword(password)
+    fun signUp(username: String, email: String, password: String) {
+        val fieldsValid = isValidUsername(username)
+                && isValidEmail(email)
+                && isValidPassword(password)
         if (fieldsValid) {
             _progressBarVisibility.value = true
             viewModelScope.launch {
-                signUpUseCase(username, email, password) {
-                    if (it.isSuccessful) {
-                        Log.d("AuthViewModel", "signInWithEmail:success")
-                        finishAuthorization()
-                        _progressBarVisibility.value = false
-                    } else {
-                        Log.d("AuthViewModel", it.exception?.message!!)
-                        onErrorCallback(it.exception?.message!!)
-                        _progressBarVisibility.value = false
-                    }
+                val result = signUpUseCase(username, email, password)
+                if (result.isSuccessful) {
+                    Log.d("AuthViewModel", "signUp:success")
+                    finishAuthorization()
+                } else {
+                    Log.d("AuthViewModel", result.exception?.message!!)
+                    showAuthorizationError(result.exception?.message!!)
                 }
+                _progressBarVisibility.value = false
             }
         }
     }
@@ -107,7 +108,7 @@ class AuthViewModel : ViewModel() {
     }
 
     private fun isValidUsername(username: String): Boolean {
-        val result = username.length <= 30
+        val result = username.trim().isNotEmpty() && username.trim().length <= 30
         if (!result) _errorInputUsername.value = true
         return result
     }
@@ -119,12 +120,16 @@ class AuthViewModel : ViewModel() {
     }
 
     private fun isValidPassword(password: String): Boolean {
-        val result = password.length >= 8
+        val result = password.trim().length >= 8
         if (!result) _errorInputPassword.value = true
         return result
     }
 
     private fun finishAuthorization() {
-        _shouldFinishAuthorization.postValue(Unit)
+        _shouldFinishAuthorization.value = Unit
+    }
+
+    private fun showAuthorizationError(message: String) {
+        _authError.value = message
     }
 }
