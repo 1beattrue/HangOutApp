@@ -9,17 +9,27 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import edu.mirea.onebeattrue.hangoutapp.data.AuthRepositoryImpl
+import edu.mirea.onebeattrue.hangoutapp.domain.AuthRepository
 import edu.mirea.onebeattrue.hangoutapp.domain.usecases.LogInUseCase
 import edu.mirea.onebeattrue.hangoutapp.domain.usecases.LogOutUseCase
 import edu.mirea.onebeattrue.hangoutapp.domain.usecases.SignUpUseCase
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 //@HiltViewModel
 //class AuthViewModel @Inject constructor(
 //    private val repository: AuthRepository
 //) : ViewModel() {
 
-class AuthViewModel : ViewModel() {
+class AuthViewModel @Inject constructor(
+    private val repository: AuthRepository
+) : ViewModel() {
+    val currentUser: FirebaseUser?
+        get() = repository.currentUser
+    private val logInUseCase = LogInUseCase(repository)
+    private val signUpUseCase = SignUpUseCase(repository)
+    private val logOutUseCase = LogOutUseCase(repository)
+
     private var _authError = MutableLiveData<String>()
     val authError: LiveData<String>
         get() = _authError
@@ -43,15 +53,6 @@ class AuthViewModel : ViewModel() {
     private val _progressBarVisibility = MutableLiveData<Boolean>()
     val progressBarVisibility: LiveData<Boolean>
         get() = _progressBarVisibility
-
-    private val repository =
-        AuthRepositoryImpl(FirebaseAuth.getInstance()) // TODO: разобраться с dagger и убрать это убожество
-
-    val currentUser: FirebaseUser?
-        get() = repository.currentUser
-    private val logInUseCase = LogInUseCase(repository)
-    private val signUpUseCase = SignUpUseCase(repository)
-    private val logOutUseCase = LogOutUseCase(repository)
 
     fun logIn(email: String, password: String) {
         val fieldsValid = isValidEmail(email) && isValidPassword(password)

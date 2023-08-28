@@ -11,11 +11,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import edu.mirea.onebeattrue.hangoutapp.databinding.FragmentRegisterBinding
+import edu.mirea.onebeattrue.hangoutapp.di.DaggerComponent
+import javax.inject.Inject
 
 class RegisterFragment : Fragment() {
-    private val viewModel: AuthViewModel by lazy {
-        ViewModelProvider(this)[AuthViewModel::class.java]
-    }
+//    private val viewModel: AuthViewModel by lazy {
+//        ViewModelProvider(this)[AuthViewModel::class.java]
+//    }
+    @Inject
+    lateinit var viewModel: AuthViewModel
+    private val component = DaggerComponent.create()
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding: FragmentRegisterBinding
@@ -31,6 +36,8 @@ class RegisterFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        component.inject(this)
+
         super.onViewCreated(view, savedInstanceState)
 
         binding.viewModel = viewModel

@@ -7,8 +7,9 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import edu.mirea.onebeattrue.hangoutapp.domain.AuthRepository
 import kotlinx.coroutines.delay
+import javax.inject.Inject
 
-class AuthRepositoryImpl(
+class AuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth
 ) : AuthRepository {
     override val currentUser: FirebaseUser?
