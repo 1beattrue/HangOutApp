@@ -6,10 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import edu.mirea.onebeattrue.hangoutapp.domain.AuthRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class AuthRepositoryImpl(
     private val firebaseAuth: FirebaseAuth
@@ -28,7 +25,6 @@ class AuthRepositoryImpl(
             }
         while (authResult == null) {
             delay(500)
-            continue
         }
         return authResult!!
     }
@@ -45,12 +41,10 @@ class AuthRepositoryImpl(
             }
         while (authResult == null) {
             delay(500)
-            continue
         }
         if (authResult!!.isSuccessful) {
             while (currentUser == null) { // TODO: подумать чо сделать с этим говнокодом (но учесть, что это работает достаточно неплохо)
                 delay(500)
-                continue
             }
             val profileUpdate = UserProfileChangeRequest.Builder().setDisplayName(username).build()
             currentUser!!.updateProfile(profileUpdate)
