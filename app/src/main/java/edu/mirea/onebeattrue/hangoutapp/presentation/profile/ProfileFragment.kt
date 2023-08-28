@@ -7,14 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import edu.mirea.onebeattrue.hangoutapp.databinding.FragmentEventListBinding
 import edu.mirea.onebeattrue.hangoutapp.databinding.FragmentProfileBinding
+import edu.mirea.onebeattrue.hangoutapp.di.DaggerComponent
+import edu.mirea.onebeattrue.hangoutapp.presentation.ViewModelFactory
 import edu.mirea.onebeattrue.hangoutapp.presentation.auth.AuthViewModel
+import javax.inject.Inject
 
 class ProfileFragment: Fragment() {
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
     private val authViewModel: AuthViewModel by lazy {
-        ViewModelProvider(this)[AuthViewModel::class.java]
+        ViewModelProvider(this, viewModelFactory)[AuthViewModel::class.java]
     }
+
+    private val component = DaggerComponent.create()
 
     private var _binding: FragmentProfileBinding? = null
     private val binding: FragmentProfileBinding
@@ -30,6 +36,7 @@ class ProfileFragment: Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        component.inject(this)
         super.onViewCreated(view, savedInstanceState)
         Log.d("PROFILE", authViewModel.currentUser?.email.toString() + " " + authViewModel.currentUser?.displayName.toString())
     }

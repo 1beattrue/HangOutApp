@@ -6,9 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import edu.mirea.onebeattrue.hangoutapp.data.AuthRepositoryImpl
 import edu.mirea.onebeattrue.hangoutapp.domain.AuthRepository
 import edu.mirea.onebeattrue.hangoutapp.domain.usecases.LogInUseCase
 import edu.mirea.onebeattrue.hangoutapp.domain.usecases.LogOutUseCase
@@ -16,19 +14,14 @@ import edu.mirea.onebeattrue.hangoutapp.domain.usecases.SignUpUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-//@HiltViewModel
-//class AuthViewModel @Inject constructor(
-//    private val repository: AuthRepository
-//) : ViewModel() {
-
 class AuthViewModel @Inject constructor(
-    private val repository: AuthRepository
+    private val repository: AuthRepository,
+    private val logInUseCase: LogInUseCase,
+    private val signUpUseCase: SignUpUseCase,
+    private val logOutUseCase: LogOutUseCase
 ) : ViewModel() {
     val currentUser: FirebaseUser?
         get() = repository.currentUser
-    private val logInUseCase = LogInUseCase(repository)
-    private val signUpUseCase = SignUpUseCase(repository)
-    private val logOutUseCase = LogOutUseCase(repository)
 
     private var _authError = MutableLiveData<String>()
     val authError: LiveData<String>

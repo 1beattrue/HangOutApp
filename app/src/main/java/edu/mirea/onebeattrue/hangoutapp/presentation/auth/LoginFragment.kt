@@ -3,7 +3,6 @@ package edu.mirea.onebeattrue.hangoutapp.presentation.auth
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,11 +38,8 @@ class LoginFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        component.inject(this) // я - убожество, не забудь убрать меня!
-
+        component.inject(this)
         super.onViewCreated(view, savedInstanceState)
-
-        Log.d("VIEWMODEL", "$viewModel")
 
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
