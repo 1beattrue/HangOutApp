@@ -3,6 +3,7 @@ package edu.mirea.onebeattrue.hangoutapp.presentation.auth
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,14 +13,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import edu.mirea.onebeattrue.hangoutapp.databinding.FragmentLoginBinding
 import edu.mirea.onebeattrue.hangoutapp.di.DaggerComponent
+import edu.mirea.onebeattrue.hangoutapp.presentation.ViewModelFactory
 import javax.inject.Inject
 
 class LoginFragment : Fragment() {
-//    private val viewModel: AuthViewModel by lazy {
-//        ViewModelProvider(this)[AuthViewModel::class.java]
-//    }
     @Inject
-    lateinit var viewModel: AuthViewModel // временная неправильная реализация для проверки работы с dagger
+    lateinit var viewModelFactory: ViewModelFactory
+    private val viewModel: AuthViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[AuthViewModel::class.java]
+    }
+
     private val component = DaggerComponent.create()
 
     private var _binding: FragmentLoginBinding? = null
@@ -39,6 +42,8 @@ class LoginFragment : Fragment() {
         component.inject(this) // я - убожество, не забудь убрать меня!
 
         super.onViewCreated(view, savedInstanceState)
+
+        Log.d("VIEWMODEL", "$viewModel")
 
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
