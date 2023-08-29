@@ -12,7 +12,7 @@ import edu.mirea.onebeattrue.hangoutapp.presentation.auth.AuthViewModel
 @Module
 interface ViewModelModule {
     @IntoMap
-    @StringKey("AuthViewModel")
+    @ViewModelKey(AuthViewModel::class)
     @Binds
     fun bindAuthViewModel(impl: AuthViewModel): ViewModel
 
