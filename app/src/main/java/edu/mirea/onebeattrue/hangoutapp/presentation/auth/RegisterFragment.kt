@@ -10,12 +10,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import edu.mirea.onebeattrue.hangoutapp.databinding.FragmentLoginBinding
+import edu.mirea.onebeattrue.hangoutapp.databinding.FragmentRegisterBinding
 import edu.mirea.onebeattrue.hangoutapp.di.DaggerComponent
 import edu.mirea.onebeattrue.hangoutapp.presentation.ViewModelFactory
 import javax.inject.Inject
 
-class LoginFragment : Fragment() {
+class RegisterFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     private val viewModel: AuthViewModel by lazy {
@@ -24,16 +24,16 @@ class LoginFragment : Fragment() {
 
     private val component = DaggerComponent.create()
 
-    private var _binding: FragmentLoginBinding? = null
-    private val binding: FragmentLoginBinding
-        get() = _binding ?: throw RuntimeException("FragmentLoginBinding = null")
+    private var _binding: FragmentRegisterBinding? = null
+    private val binding: FragmentRegisterBinding
+        get() = _binding ?: throw RuntimeException("FragmentRegisterBinding = null")
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -47,22 +47,16 @@ class LoginFragment : Fragment() {
         addTextChangedListeners()
         observeViewModel()
 
-        binding.btnLogin.setOnClickListener {
-            viewModel.logIn(
+        binding.btnRegister.setOnClickListener {
+            viewModel.signUp(
+                username = binding.etUsername.text.toString(),
                 email = binding.etEmail.text.toString(),
                 password = binding.etPassword.text.toString()
             )
         }
 
-        binding.tvLoginToRegister.setOnClickListener {
-            launchRegisterFragment()
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        if (viewModel.currentUser != null) {
-            launchMainFragment()
+        binding.tvRegisterToLogin.setOnClickListener {
+            launchLoginFragment()
         }
     }
 
@@ -74,7 +68,7 @@ class LoginFragment : Fragment() {
     private fun observeViewModel() {
         with(viewModel) {
             shouldFinishAuthorization.observe(viewLifecycleOwner) {
-                launchMainFragment()
+                launchLoginFragment()
             }
             authError.observe(viewLifecycleOwner) { message ->
                 Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
@@ -105,13 +99,20 @@ class LoginFragment : Fragment() {
             override fun afterTextChanged(p0: Editable?) {
             }
         })
+        binding.etUsername.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                viewModel.resetErrorInputUsername()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        })
     }
 
-    private fun launchMainFragment() {
-        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToMainFragment())
-    }
-
-    private fun launchRegisterFragment() {
-        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
+    private fun launchLoginFragment() {
+        findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToLoginFragment())
     }
 }

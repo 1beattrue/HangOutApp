@@ -4,4 +4,17 @@
     <string name="invite_list_title">Приглашения</string>
     <string name="map_title">Карта</string>
     <string name="profile_title">Профиль</string>
+    <string name="register">Регистрация</string>
+    <string name="username">Никнейм</string>
+    <string name="phone_number">Номер телефона</string>
+    <string name="password">Пароль</string>
+    <string name="register_button">Зарегистрироваться</string>
+    <string name="register_to_login">Уже зарегистрированы? Нажмите, чтобы войти</string>
+    <string name="login">Авторизация</string>
+    <string name="login_button">Войти</string>
+    <string name="login_to_register">Нет аккаунта? Нажмите, чтобы зарегистрироваться</string>
+    <string name="email">Электронная почта</string>
+    <string name="error_input_email">Неверный формат электронной почты</string>
+    <string name="error_input_password">Пароль должен содержать не менее 8 символов</string>
+    <string name="error_input_username">Никнейм должен содержать от 1 до 30 символов</string>
 </resources>
