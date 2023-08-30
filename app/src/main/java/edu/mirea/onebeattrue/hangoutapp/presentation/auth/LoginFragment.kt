@@ -1,5 +1,6 @@
 package edu.mirea.onebeattrue.hangoutapp.presentation.auth
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,7 +19,7 @@ import javax.inject.Inject
 class LoginFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    private val viewModel: AuthViewModel by lazy {
+    private val authViewModel: AuthViewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[AuthViewModel::class.java]
     }
 
@@ -27,6 +28,11 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding: FragmentLoginBinding
         get() = _binding ?: throw RuntimeException("FragmentLoginBinding = null")
+
+    override fun onAttach(context: Context) {
+        component.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,17 +44,16 @@ class LoginFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        component.inject(this)
         super.onViewCreated(view, savedInstanceState)
 
-        binding.viewModel = viewModel
+        binding.viewModel = authViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         addTextChangedListeners()
         observeViewModel()
 
         binding.btnLogin.setOnClickListener {
-            viewModel.logIn(
+            authViewModel.logIn(
                 email = binding.etEmail.text.toString(),
                 password = binding.etPassword.text.toString()
             )
@@ -61,8 +66,8 @@ class LoginFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        if (viewModel.currentUser != null) {
-            launchMainFragment()
+        if (authViewModel.currentUser != null) {
+            launchEventListFragment()
         }
     }
 
@@ -72,9 +77,9 @@ class LoginFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        with(viewModel) {
+        with(authViewModel) {
             shouldFinishAuthorization.observe(viewLifecycleOwner) {
-                launchMainFragment()
+                launchEventListFragment()
             }
             authError.observe(viewLifecycleOwner) { message ->
                 Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
@@ -88,7 +93,7 @@ class LoginFragment : Fragment() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetErrorInputEmail()
+                authViewModel.resetErrorInputEmail()
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -99,7 +104,7 @@ class LoginFragment : Fragment() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetErrorInputPassword()
+                authViewModel.resetErrorInputPassword()
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -107,8 +112,8 @@ class LoginFragment : Fragment() {
         })
     }
 
-    private fun launchMainFragment() {
-        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToMainFragment())
+    private fun launchEventListFragment() {
+        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToEventListFragment())
     }
 
     private fun launchRegisterFragment() {

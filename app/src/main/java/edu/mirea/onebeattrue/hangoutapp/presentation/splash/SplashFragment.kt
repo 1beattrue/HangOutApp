@@ -27,9 +27,7 @@ class SplashFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Handler().postDelayed({
-            launchLoginFragment()
-        }, 3000)
+
     }
 
     override fun onDestroyView() {
@@ -37,7 +35,7 @@ class SplashFragment : Fragment() {
         _binding = null
     }
 
-    private fun launchLoginFragment() {
-        findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
-    }
+//    private fun launchLoginFragment() {
+//        findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
+//    }
 }

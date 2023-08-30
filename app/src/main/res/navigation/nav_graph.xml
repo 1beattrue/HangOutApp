@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment"
+    >
+
+    <fragment
+        android:id="@+id/eventListFragment"
+        android:name="edu.mirea.onebeattrue.hangoutapp.presentation.eventlist.EventListFragment"
+        android:label="EventListFragment" />
+    <fragment
+        android:id="@+id/inviteListFragment"
+        android:name="edu.mirea.onebeattrue.hangoutapp.presentation.invitelist.InviteListFragment"
+        android:label="InviteListFragment" />
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="edu.mirea.onebeattrue.hangoutapp.presentation.map.MapFragment"
+        android:label="MapFragment" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="edu.mirea.onebeattrue.hangoutapp.presentation.profile.ProfileFragment"
+        android:label="ProfileFragment" >
+        <action
+            android:id="@+id/action_profileFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/nav_graph" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="edu.mirea.onebeattrue.hangoutapp.presentation.auth.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment"
+            app:popUpTo="@id/nav_graph" />
+        <action
+            android:id="@+id/action_loginFragment_to_eventListFragment"
+            app:destination="@id/eventListFragment"
+            app:popUpTo="@id/nav_graph" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="edu.mirea.onebeattrue.hangoutapp.presentation.auth.RegisterFragment"
+        android:label="RegisterFragment" >
+        <action
+            android:id="@+id/action_registerFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/nav_graph" />
+    </fragment>
+</navigation>

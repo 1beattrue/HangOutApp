@@ -86,7 +86,7 @@ class AuthViewModel @Inject constructor(
     }
 
     fun logOut() {
-        logOutUseCase
+        logOutUseCase()
     }
 
     fun resetErrorInputUsername() {
