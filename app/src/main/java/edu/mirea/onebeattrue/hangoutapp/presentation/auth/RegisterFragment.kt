@@ -1,5 +1,6 @@
 package edu.mirea.onebeattrue.hangoutapp.presentation.auth
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,7 +19,7 @@ import javax.inject.Inject
 class RegisterFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    private val viewModel: AuthViewModel by lazy {
+    private val authViewModel: AuthViewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[AuthViewModel::class.java]
     }
 
@@ -27,6 +28,11 @@ class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding: FragmentRegisterBinding
         get() = _binding ?: throw RuntimeException("FragmentRegisterBinding = null")
+
+    override fun onAttach(context: Context) {
+        component.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,17 +44,16 @@ class RegisterFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        component.inject(this)
         super.onViewCreated(view, savedInstanceState)
 
-        binding.viewModel = viewModel
+        binding.viewModel = authViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         addTextChangedListeners()
         observeViewModel()
 
         binding.btnRegister.setOnClickListener {
-            viewModel.signUp(
+            authViewModel.signUp(
                 username = binding.etUsername.text.toString(),
                 email = binding.etEmail.text.toString(),
                 password = binding.etPassword.text.toString()
@@ -66,7 +71,7 @@ class RegisterFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        with(viewModel) {
+        with(authViewModel) {
             shouldFinishAuthorization.observe(viewLifecycleOwner) {
                 launchLoginFragment()
             }
@@ -82,7 +87,7 @@ class RegisterFragment : Fragment() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetErrorInputEmail()
+                authViewModel.resetErrorInputEmail()
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -93,7 +98,7 @@ class RegisterFragment : Fragment() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetErrorInputPassword()
+                authViewModel.resetErrorInputPassword()
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -104,7 +109,7 @@ class RegisterFragment : Fragment() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetErrorInputUsername()
+                authViewModel.resetErrorInputUsername()
             }
 
             override fun afterTextChanged(p0: Editable?) {
