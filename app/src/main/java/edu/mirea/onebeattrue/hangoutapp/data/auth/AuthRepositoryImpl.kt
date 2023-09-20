@@ -5,7 +5,7 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
-import edu.mirea.onebeattrue.hangoutapp.domain.AuthRepository
+import edu.mirea.onebeattrue.hangoutapp.domain.auth.AuthRepository
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
