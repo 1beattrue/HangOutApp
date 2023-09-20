@@ -7,10 +7,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
-import edu.mirea.onebeattrue.hangoutapp.domain.AuthRepository
-import edu.mirea.onebeattrue.hangoutapp.domain.usecases.LogInUseCase
-import edu.mirea.onebeattrue.hangoutapp.domain.usecases.LogOutUseCase
-import edu.mirea.onebeattrue.hangoutapp.domain.usecases.SignUpUseCase
+import edu.mirea.onebeattrue.hangoutapp.domain.auth.AuthRepository
+import edu.mirea.onebeattrue.hangoutapp.domain.auth.usecases.LogInUseCase
+import edu.mirea.onebeattrue.hangoutapp.domain.auth.usecases.LogOutUseCase
+import edu.mirea.onebeattrue.hangoutapp.domain.auth.usecases.SignUpUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

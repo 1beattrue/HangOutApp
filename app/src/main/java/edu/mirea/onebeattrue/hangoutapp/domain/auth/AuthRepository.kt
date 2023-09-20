@@ -1,4 +1,4 @@
-package edu.mirea.onebeattrue.hangoutapp.domain
+package edu.mirea.onebeattrue.hangoutapp.domain.auth
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult

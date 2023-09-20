@@ -1,4 +1,4 @@
-package edu.mirea.onebeattrue.hangoutapp.data
+package edu.mirea.onebeattrue.hangoutapp.data.auth
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
