@@ -1,11 +1,11 @@
-package edu.mirea.onebeattrue.hangoutapp.data
+package edu.mirea.onebeattrue.hangoutapp.data.auth
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
-import edu.mirea.onebeattrue.hangoutapp.domain.AuthRepository
+import edu.mirea.onebeattrue.hangoutapp.domain.auth.AuthRepository
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
@@ -21,11 +21,11 @@ class AuthRepositoryImpl @Inject constructor(
     ): Task<AuthResult> {
         var authResult: Task<AuthResult>? = null
         firebaseAuth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                authResult = task
+            .addOnCompleteListener {taskResult ->
+                authResult = taskResult
             }
         while (authResult == null) {
-            delay(500)
+            delay(1)
         }
         return authResult!!
     }
@@ -41,11 +41,11 @@ class AuthRepositoryImpl @Inject constructor(
                 authResult = task
             }
         while (authResult == null) {
-            delay(500)
+            delay(1)
         }
         if (authResult!!.isSuccessful) {
             while (currentUser == null) { // TODO: подумать чо сделать с этим говнокодом (но учесть, что это работает достаточно неплохо)
-                delay(500)
+                delay(1)
             }
             val profileUpdate = UserProfileChangeRequest.Builder().setDisplayName(username).build()
             currentUser!!.updateProfile(profileUpdate)

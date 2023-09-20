@@ -1,6 +1,7 @@
 package edu.mirea.onebeattrue.hangoutapp.di
 
 import dagger.Component
+import edu.mirea.onebeattrue.hangoutapp.di.auth.AuthModule
 import edu.mirea.onebeattrue.hangoutapp.presentation.auth.LoginFragment
 import edu.mirea.onebeattrue.hangoutapp.presentation.auth.RegisterFragment
 import edu.mirea.onebeattrue.hangoutapp.presentation.profile.ProfileFragment
