@@ -5,6 +5,8 @@ import android.widget.ProgressBar
 import androidx.databinding.BindingAdapter
 import com.google.android.material.textfield.TextInputLayout
 import edu.mirea.onebeattrue.hangoutapp.R
+import edu.mirea.onebeattrue.hangoutapp.presentation.auth.AuthState
+import edu.mirea.onebeattrue.hangoutapp.presentation.auth.Progress
 
 /**
  * fragment_register
@@ -12,8 +14,8 @@ import edu.mirea.onebeattrue.hangoutapp.R
  * fragment_login
  */
 @BindingAdapter("emailError")
-fun bindEmailError(textInputLayout: TextInputLayout, errorInputEmail: Boolean) {
-    val message = if (errorInputEmail) {
+fun bindEmailError(textInputLayout: TextInputLayout, isEmailError: Boolean) {
+    val message = if (isEmailError) {
         textInputLayout.context.getString(R.string.error_input_email)
     } else {
         null
@@ -22,8 +24,8 @@ fun bindEmailError(textInputLayout: TextInputLayout, errorInputEmail: Boolean) {
 }
 
 @BindingAdapter("passwordError")
-fun bindPasswordError(textInputLayout: TextInputLayout, errorInputPassword: Boolean) {
-    val message = if (errorInputPassword) {
+fun bindPasswordError(textInputLayout: TextInputLayout, isPasswordError: Boolean) {
+    val message = if (isPasswordError) {
         textInputLayout.context.getString(R.string.error_input_password)
     } else {
         null
@@ -32,20 +34,11 @@ fun bindPasswordError(textInputLayout: TextInputLayout, errorInputPassword: Bool
 }
 
 @BindingAdapter("usernameError")
-fun bindUsernameError(textInputLayout: TextInputLayout, errorInputUsername: Boolean) {
-    val message = if (errorInputUsername) {
+fun bindUsernameError(textInputLayout: TextInputLayout, isUsernameError: Boolean) {
+    val message = if (isUsernameError) {
         textInputLayout.context.getString(R.string.error_input_username)
     } else {
         null
     }
     textInputLayout.error = message
-}
-
-@BindingAdapter("progressBarVisibility")
-fun bindProgressBarVisibility(progressBar: ProgressBar, isVisible: Boolean) {
-    if (isVisible) {
-        progressBar.visibility = View.VISIBLE
-    } else {
-        progressBar.visibility = View.GONE
-    }
 }

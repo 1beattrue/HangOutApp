@@ -71,12 +71,20 @@ class RegisterFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        with(authViewModel) {
-            shouldFinishAuthorization.observe(viewLifecycleOwner) {
-                launchLoginFragment()
-            }
-            authError.observe(viewLifecycleOwner) { message ->
-                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+        authViewModel.authState.observe(viewLifecycleOwner) {
+            binding.progressBar.visibility = View.GONE
+            binding.btnRegister.isEnabled = true
+            when (it) {
+                is ErrorMessage -> {
+                    Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
+                }
+                is Progress -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.btnRegister.isEnabled = false
+                }
+                is Finish -> {
+                    launchLoginFragment()
+                }
             }
         }
     }

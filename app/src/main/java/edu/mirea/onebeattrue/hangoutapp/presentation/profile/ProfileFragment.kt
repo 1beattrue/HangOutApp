@@ -2,6 +2,7 @@ package edu.mirea.onebeattrue.hangoutapp.presentation.profile
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,6 +49,7 @@ class ProfileFragment: Fragment() {
             authViewModel.logOut()
             launchLoginFragment()
         }
+        Log.d("TAG", authViewModel.currentUser?.displayName.toString())
     }
 
     override fun onDestroyView() {

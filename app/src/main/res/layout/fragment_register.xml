@@ -10,6 +10,7 @@
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -25,7 +26,7 @@
             android:textStyle="bold" />
 
         <com.google.android.material.textfield.TextInputLayout
-            app:usernameError="@{viewModel.errorInputUsername}"
+            app:usernameError="@{viewModel.isUsernameError()}"
             android:id="@+id/tilUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,7 +41,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            app:emailError="@{viewModel.errorInputEmail}"
+            app:emailError="@{viewModel.isEmailError()}"
             android:id="@+id/tilEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -55,7 +56,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            app:passwordError="@{viewModel.errorInputPassword}"
+            app:passwordError="@{viewModel.isPasswordError()}"
             android:id="@+id/tilPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -84,7 +85,8 @@
             android:text="@string/register_to_login" />
 
         <ProgressBar
-            app:progressBarVisibility="@{viewModel.progressBarVisibility}"
+            tools:visibility="visible"
+            android:visibility="gone"
             android:id="@+id/progressBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

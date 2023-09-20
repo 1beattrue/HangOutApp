@@ -1,17 +1,20 @@
 package edu.mirea.onebeattrue.hangoutapp.presentation.auth
 
-import android.util.Log
 import androidx.core.util.PatternsCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
 import edu.mirea.onebeattrue.hangoutapp.domain.auth.AuthRepository
 import edu.mirea.onebeattrue.hangoutapp.domain.auth.usecases.LogInUseCase
 import edu.mirea.onebeattrue.hangoutapp.domain.auth.usecases.LogOutUseCase
 import edu.mirea.onebeattrue.hangoutapp.domain.auth.usecases.SignUpUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class AuthViewModel @Inject constructor(
@@ -23,65 +26,43 @@ class AuthViewModel @Inject constructor(
     val currentUser: FirebaseUser?
         get() = repository.currentUser
 
-    private var _authError = MutableLiveData<String>()
-    val authError: LiveData<String>
-        get() = _authError
+    private var _isUsernameError = MutableLiveData<Boolean>()
+    val isUsernameError: LiveData<Boolean>
+        get() = _isUsernameError
 
-    private var _shouldFinishAuthorization = MutableLiveData<Unit>()
-    val shouldFinishAuthorization: LiveData<Unit>
-        get() = _shouldFinishAuthorization
+    private var _isEmailError = MutableLiveData<Boolean>()
+    val isEmailError: LiveData<Boolean>
+        get() = _isEmailError
 
-    private var _errorInputUsername = MutableLiveData<Boolean>()
-    val errorInputUsername: LiveData<Boolean>
-        get() = _errorInputUsername
+    private var _isPasswordError = MutableLiveData<Boolean>()
+    val isPasswordError: LiveData<Boolean>
+        get() = _isPasswordError
 
-    private var _errorInputEmail = MutableLiveData<Boolean>()
-    val errorInputEmail: LiveData<Boolean>
-        get() = _errorInputEmail
-
-    private var _errorInputPassword = MutableLiveData<Boolean>()
-    val errorInputPassword: LiveData<Boolean>
-        get() = _errorInputPassword
-
-    private val _progressBarVisibility = MutableLiveData<Boolean>()
-    val progressBarVisibility: LiveData<Boolean>
-        get() = _progressBarVisibility
+    private var _authState = MutableLiveData<AuthState>()
+    val authState: LiveData<AuthState>
+        get() = _authState
 
     fun logIn(email: String, password: String) {
-        val fieldsValid = isValidEmail(email) && isValidPassword(password)
-        if (fieldsValid) {
-            _progressBarVisibility.value = true
-            viewModelScope.launch {
-                val result = logInUseCase(email, password)
-                if (result.isSuccessful) {
-                    Log.d("AuthViewModel", "logIn:success")
-                    finishAuthorization()
-                } else {
-                    Log.d("AuthViewModel", result.exception?.message!!)
-                    showAuthorizationError(result.exception?.message!!)
-                }
-                _progressBarVisibility.value = false
+        if (!isFieldsValid(email = email, password = password)) return
+
+        viewModelScope.launch {
+            _authState.value = Progress
+            val result = withContext(Dispatchers.Default) {
+                logInUseCase(email, password)
             }
+            handleResult(result)
         }
     }
 
     fun signUp(username: String, email: String, password: String) {
-        val fieldsValid = isValidUsername(username)
-                && isValidEmail(email)
-                && isValidPassword(password)
-        if (fieldsValid) {
-            _progressBarVisibility.value = true
-            viewModelScope.launch {
-                val result = signUpUseCase(username, email, password)
-                if (result.isSuccessful) {
-                    Log.d("AuthViewModel", "signUp:success")
-                    finishAuthorization()
-                } else {
-                    Log.d("AuthViewModel", result.exception?.message!!)
-                    showAuthorizationError(result.exception?.message!!)
-                }
-                _progressBarVisibility.value = false
+        if (!isFieldsValid(username = username, email = email, password = password)) return
+
+        viewModelScope.launch {
+            _authState.value = Progress
+            val result = withContext(Dispatchers.Default) {
+                signUpUseCase(username, email, password)
             }
+            handleResult(result)
         }
     }
 
@@ -90,40 +71,59 @@ class AuthViewModel @Inject constructor(
     }
 
     fun resetErrorInputUsername() {
-        _errorInputUsername.value = false
+        _isUsernameError.value = false
     }
 
     fun resetErrorInputEmail() {
-        _errorInputEmail.value = false
+        _isEmailError.value = false
     }
 
     fun resetErrorInputPassword() {
-        _errorInputPassword.value = false
+        _isPasswordError.value = false
+    }
+
+    private fun handleResult(result: Task<AuthResult>) {
+        if (result.isSuccessful) {
+            _authState.value = Finish
+        } else {
+            _authState.value = ErrorMessage(result.exception?.message)
+        }
+    }
+
+    private fun isFieldsValid(
+        username: String = DEFAULT_USERNAME,
+        email: String,
+        password: String
+    ): Boolean {
+        var result = true
+        if (!isValidUsername(username)) {
+            _isUsernameError.value = true
+            result = false
+        }
+        if (!isValidEmail(email)) {
+            _isEmailError.value = true
+            result = false
+        }
+        if (!isValidPassword(password)) {
+            _isPasswordError.value = true
+            result = false
+        }
+        return result
     }
 
     private fun isValidUsername(username: String): Boolean {
-        val result = username.trim().isNotEmpty() && username.trim().length <= 30
-        if (!result) _errorInputUsername.value = true
-        return result
+        return username.trim().isNotEmpty() && username.trim().length <= 30
     }
 
     private fun isValidEmail(email: String): Boolean {
-        val result = PatternsCompat.EMAIL_ADDRESS.matcher(email).matches()
-        if (!result) _errorInputEmail.value = true
-        return result
+        return PatternsCompat.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     private fun isValidPassword(password: String): Boolean {
-        val result = password.trim().length >= 8
-        if (!result) _errorInputPassword.value = true
-        return result
+        return password.trim().length >= 8
     }
 
-    private fun finishAuthorization() {
-        _shouldFinishAuthorization.value = Unit
-    }
-
-    private fun showAuthorizationError(message: String) {
-        _authError.value = message
+    companion object {
+        private const val DEFAULT_USERNAME = "XXX"
     }
 }
