@@ -3,7 +3,6 @@ package edu.mirea.onebeattrue.hangoutapp.data.eventlist
 import edu.mirea.onebeattrue.hangoutapp.domain.eventlist.EventListRepository
 import edu.mirea.onebeattrue.hangoutapp.domain.eventlist.entities.EventItem
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 class EventListRepositoryImpl(

@@ -16,7 +16,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import edu.mirea.onebeattrue.hangoutapp.data.Resource
 import edu.mirea.onebeattrue.hangoutapp.databinding.FragmentLoginBinding
-import edu.mirea.onebeattrue.hangoutapp.di.DaggerComponent
+import edu.mirea.onebeattrue.hangoutapp.presentation.HangOutApplication
 import edu.mirea.onebeattrue.hangoutapp.presentation.ViewModelFactory
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,7 +28,9 @@ class LoginFragment : Fragment() {
         ViewModelProvider(this, viewModelFactory)[AuthViewModel::class.java]
     }
 
-    private val component = DaggerComponent.create()
+    private val component by lazy {
+        (requireActivity().application as HangOutApplication).component
+    }
 
     private var _binding: FragmentLoginBinding? = null
     private val binding: FragmentLoginBinding
