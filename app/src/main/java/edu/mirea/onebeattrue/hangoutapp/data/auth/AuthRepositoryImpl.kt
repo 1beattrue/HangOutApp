@@ -1,12 +1,11 @@
 package edu.mirea.onebeattrue.hangoutapp.data.auth
 
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import edu.mirea.onebeattrue.hangoutapp.data.Resource
+import edu.mirea.onebeattrue.hangoutapp.data.auth.utils.await
 import edu.mirea.onebeattrue.hangoutapp.domain.auth.AuthRepository
-import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
@@ -15,42 +14,36 @@ class AuthRepositoryImpl @Inject constructor(
     override val currentUser: FirebaseUser?
         get() = firebaseAuth.currentUser
 
-    override suspend fun logIn(
+    override suspend fun login(
         email: String,
         password: String
-    ): Task<AuthResult> {
-        var authResult: Task<AuthResult>? = null
-        firebaseAuth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener {taskResult ->
-                authResult = taskResult
-            }
-        while (authResult == null) {
-            delay(1)
+    ): Resource<FirebaseUser> {
+        return try {
+            val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+            Resource.Success(result.user!!)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Failure(e)
         }
-        return authResult!!
     }
 
-    override suspend fun signUp(
+    override suspend fun signup(
         username: String,
         email: String,
         password: String
-    ): Task<AuthResult> {
-        var authResult: Task<AuthResult>? = null
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                authResult = task
-            }
-        while (authResult == null) {
-            delay(1)
+    ): Resource<FirebaseUser> {
+        return try {
+            val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+            result.user?.updateProfile(
+                UserProfileChangeRequest.Builder()
+                    .setDisplayName(username)
+                    .build()
+            )?.await()
+            Resource.Success(result.user!!)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Failure(e)
         }
-        if (authResult!!.isSuccessful) {
-            while (currentUser == null) { // TODO: подумать чо сделать с этим говнокодом (но учесть, что это работает достаточно неплохо)
-                delay(1)
-            }
-            val profileUpdate = UserProfileChangeRequest.Builder().setDisplayName(username).build()
-            currentUser!!.updateProfile(profileUpdate)
-        }
-        return authResult!!
     }
 
     override fun logOut() {

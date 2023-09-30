@@ -9,11 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import edu.mirea.onebeattrue.hangoutapp.data.Resource
 import edu.mirea.onebeattrue.hangoutapp.databinding.FragmentRegisterBinding
 import edu.mirea.onebeattrue.hangoutapp.di.DaggerComponent
 import edu.mirea.onebeattrue.hangoutapp.presentation.ViewModelFactory
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RegisterFragment : Fragment() {
@@ -53,7 +58,7 @@ class RegisterFragment : Fragment() {
         observeViewModel()
 
         binding.btnRegister.setOnClickListener {
-            authViewModel.signUp(
+            authViewModel.signup(
                 username = binding.etUsername.text.toString(),
                 email = binding.etEmail.text.toString(),
                 password = binding.etPassword.text.toString()
@@ -71,19 +76,32 @@ class RegisterFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        authViewModel.authState.observe(viewLifecycleOwner) {
-            binding.progressBar.visibility = View.GONE
-            binding.btnRegister.isEnabled = true
-            when (it) {
-                is ErrorMessage -> {
-                    Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
-                }
-                is Progress -> {
-                    binding.progressBar.visibility = View.VISIBLE
-                    binding.btnRegister.isEnabled = false
-                }
-                is Finish -> {
-                    launchLoginFragment()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                authViewModel.signupFlow.collect {
+                    binding.progressBar.visibility = View.GONE
+                    binding.btnRegister.isEnabled = true
+                    when (it) {
+                        is Resource.Failure -> {
+                            Toast.makeText(
+                                requireActivity(),
+                                it.exception.toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        is Resource.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                            binding.btnRegister.isEnabled = false
+                        }
+
+                        is Resource.Success -> {
+                            launchLoginFragment()
+                        }
+
+                        null -> {
+                        }
+                    }
                 }
             }
         }
