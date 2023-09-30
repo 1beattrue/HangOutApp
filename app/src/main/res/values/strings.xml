@@ -17,4 +17,9 @@
     <string name="error_input_email">Неверный формат электронной почты</string>
     <string name="error_input_password">Пароль должен содержать не менее 8 символов</string>
     <string name="error_input_username">Никнейм должен содержать от 1 до 30 символов</string>
+    <string name="event_name">Event Name</string>
+    <string name="event_date">Event Date</string>
+    <string name="event_time">Event Time</string>
+    <string name="event_avatar">Event Avatar</string>
+    <string name="event_location">Event Location</string>
 </resources>
