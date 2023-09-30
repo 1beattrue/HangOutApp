@@ -22,4 +22,5 @@
     <string name="event_time">Event Time</string>
     <string name="event_avatar">Event Avatar</string>
     <string name="event_location">Event Location</string>
+    <string name="add_event_item">Add Event Item</string>
 </resources>
