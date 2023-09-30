@@ -5,16 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
+import edu.mirea.onebeattrue.hangoutapp.data.Resource
 import edu.mirea.onebeattrue.hangoutapp.domain.auth.AuthRepository
 import edu.mirea.onebeattrue.hangoutapp.domain.auth.usecases.LogInUseCase
 import edu.mirea.onebeattrue.hangoutapp.domain.auth.usecases.LogOutUseCase
 import edu.mirea.onebeattrue.hangoutapp.domain.auth.usecases.SignUpUseCase
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class AuthViewModel @Inject constructor(
@@ -38,36 +37,44 @@ class AuthViewModel @Inject constructor(
     val isPasswordError: LiveData<Boolean>
         get() = _isPasswordError
 
-    private var _authState = MutableLiveData<AuthState>()
-    val authState: LiveData<AuthState>
-        get() = _authState
+    private val _loginFlow = MutableStateFlow<Resource<FirebaseUser>?>(null)
+    val loginFlow: StateFlow<Resource<FirebaseUser>?>
+        get() = _loginFlow
 
-    fun logIn(email: String, password: String) {
-        if (!isFieldsValid(email = email, password = password)) return
+    private val _signupFlow = MutableStateFlow<Resource<FirebaseUser>?>(null)
+    val signupFlow: StateFlow<Resource<FirebaseUser>?>
+        get() = _signupFlow
 
-        viewModelScope.launch {
-            _authState.value = Progress
-            val result = withContext(Dispatchers.Default) {
-                logInUseCase(email, password)
-            }
-            handleResult(result)
+    init {
+        if (repository.currentUser != null) {
+            _loginFlow.value = Resource.Success(repository.currentUser!!)
         }
     }
 
-    fun signUp(username: String, email: String, password: String) {
+    fun login(email: String, password: String) {
+        if (!isFieldsValid(username = DEFAULT_USERNAME, email = email, password = password)) return
+
+        viewModelScope.launch {
+            _loginFlow.value = Resource.Loading
+            val result = logInUseCase(email, password)
+            _loginFlow.value = result
+        }
+    }
+
+    fun signup(username: String, email: String, password: String) {
         if (!isFieldsValid(username = username, email = email, password = password)) return
 
         viewModelScope.launch {
-            _authState.value = Progress
-            val result = withContext(Dispatchers.Default) {
-                signUpUseCase(username, email, password)
-            }
-            handleResult(result)
+            _signupFlow.value = Resource.Loading
+            val result = signUpUseCase(username, email, password)
+            _signupFlow.value = result
         }
     }
 
     fun logOut() {
         logOutUseCase()
+        _loginFlow.value = null
+        _signupFlow.value = null
     }
 
     fun resetErrorInputUsername() {
@@ -80,14 +87,6 @@ class AuthViewModel @Inject constructor(
 
     fun resetErrorInputPassword() {
         _isPasswordError.value = false
-    }
-
-    private fun handleResult(result: Task<AuthResult>) {
-        if (result.isSuccessful) {
-            _authState.value = Finish
-        } else {
-            _authState.value = ErrorMessage(result.exception?.message)
-        }
     }
 
     private fun isFieldsValid(

@@ -1,12 +1,8 @@
 package edu.mirea.onebeattrue.hangoutapp.presentation
 
-import android.view.View
-import android.widget.ProgressBar
 import androidx.databinding.BindingAdapter
 import com.google.android.material.textfield.TextInputLayout
 import edu.mirea.onebeattrue.hangoutapp.R
-import edu.mirea.onebeattrue.hangoutapp.presentation.auth.AuthState
-import edu.mirea.onebeattrue.hangoutapp.presentation.auth.Progress
 
 /**
  * fragment_register

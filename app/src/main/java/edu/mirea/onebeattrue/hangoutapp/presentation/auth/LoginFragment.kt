@@ -9,11 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import edu.mirea.onebeattrue.hangoutapp.data.Resource
 import edu.mirea.onebeattrue.hangoutapp.databinding.FragmentLoginBinding
 import edu.mirea.onebeattrue.hangoutapp.di.DaggerComponent
 import edu.mirea.onebeattrue.hangoutapp.presentation.ViewModelFactory
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LoginFragment : Fragment() {
@@ -53,7 +58,7 @@ class LoginFragment : Fragment() {
         observeViewModel()
 
         binding.btnLogin.setOnClickListener {
-            authViewModel.logIn(
+            authViewModel.login(
                 email = binding.etEmail.text.toString(),
                 password = binding.etPassword.text.toString()
             )
@@ -64,32 +69,38 @@ class LoginFragment : Fragment() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        if (authViewModel.currentUser != null) {
-            launchEventListFragment()
-        }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
     private fun observeViewModel() {
-        authViewModel.authState.observe(viewLifecycleOwner) {
-            binding.progressBar.visibility = View.GONE
-            binding.btnLogin.isEnabled = true
-            when (it) {
-                is ErrorMessage -> {
-                    Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
-                }
-                is Progress -> {
-                    binding.progressBar.visibility = View.VISIBLE
-                    binding.btnLogin.isEnabled = false
-                }
-                is Finish -> {
-                    launchEventListFragment()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                authViewModel.loginFlow.collect {
+                    binding.progressBar.visibility = View.GONE
+                    binding.btnLogin.isEnabled = true
+                    when (it) {
+                        is Resource.Failure -> {
+                            Toast.makeText(
+                                requireActivity(),
+                                it.exception.toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        is Resource.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                            binding.btnLogin.isEnabled = false
+                        }
+
+                        is Resource.Success -> {
+                            launchEventListFragment()
+                        }
+
+                        null -> {
+                        }
+                    }
                 }
             }
         }
