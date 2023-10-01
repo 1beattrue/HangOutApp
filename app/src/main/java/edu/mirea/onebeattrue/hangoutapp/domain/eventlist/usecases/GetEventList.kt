@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetEventList @Inject constructor(
     private val repository: EventListRepository
 ) {
-    suspend operator fun invoke() = repository.getEventList()
+    operator fun invoke() = repository.getEventList()
 }

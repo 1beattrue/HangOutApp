@@ -4,8 +4,9 @@ import edu.mirea.onebeattrue.hangoutapp.domain.eventlist.EventListRepository
 import edu.mirea.onebeattrue.hangoutapp.domain.eventlist.entities.EventItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class EventListRepositoryImpl(
+class EventListRepositoryImpl @Inject constructor(
     private val eventListDao: EventListDao,
     private val mapper: EventListMapper
 ) : EventListRepository {

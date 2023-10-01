@@ -10,14 +10,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface EventListDao {
     @Query("SELECT * FROM event_items")
-    fun getEventList(): Flow<List<EventItemDbModel>>
+    fun getEventList(): Flow<List<EventItemDbModel>> // TODO: разобраться почему не работает suspend
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addEventItem(eventListDbModel: EventItemDbModel)
+    fun addEventItem(eventListDbModel: EventItemDbModel)
 
     @Query("DELETE FROM event_items WHERE id =:eventItemId")
-    suspend fun deleteEventItem(eventItemId: Int)
+    fun deleteEventItem(eventItemId: Int)
 
     @Query("SELECT * FROM event_items WHERE id=:eventItemId LIMIT 1")
-    suspend fun getEventItem(eventItemId: Int): EventItemDbModel
+    fun getEventItem(eventItemId: Int): EventItemDbModel
 }

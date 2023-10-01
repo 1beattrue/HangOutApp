@@ -45,7 +45,8 @@
 
                 android:layout_margin="8dp"
 
-                android:text="@string/event_name"
+                tools:text="@string/event_name"
+                android:text="@{eventItem.name}"
 
                 app:layout_constraintStart_toEndOf="@id/ivAvatar"
                 app:layout_constraintTop_toTopOf="parent"
@@ -59,7 +60,8 @@
 
                 android:layout_margin="8dp"
 
-                android:text="@string/event_date"
+                tools:text="@string/event_date"
+                android:text="@{eventItem.date.toString()}"
 
                 app:layout_constraintStart_toEndOf="@id/ivAvatar"
                 app:layout_constraintTop_toBottomOf="@id/tvName"
@@ -73,7 +75,8 @@
 
                 android:layout_margin="8dp"
 
-                android:text="@string/event_time"
+                tools:text="@string/event_time"
+                android:text="@{eventItem.time.toString()}"
 
                 app:layout_constraintStart_toEndOf="@id/ivAvatar"
                 app:layout_constraintTop_toBottomOf="@id/tvDate"
@@ -87,7 +90,8 @@
 
                 android:layout_margin="8dp"
 
-                android:text="@string/event_location"
+                tools:text="@string/event_location"
+                android:text="@{eventItem.location.toString()}"
 
                 app:layout_constraintStart_toEndOf="@id/ivAvatar"
                 app:layout_constraintTop_toBottomOf="@id/tvTime"

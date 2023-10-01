@@ -1,12 +1,9 @@
 package edu.mirea.onebeattrue.hangoutapp.domain.eventlist.entities
 
-import java.sql.Time
-import java.sql.Date
-
 data class EventItem(
     val name: String,
-    val date: Date,
-    val time: Time,
+    val date: String,
+    val time: String,
     val location: String,
     var id: Int = UNDEFINED_ID
 ) {
