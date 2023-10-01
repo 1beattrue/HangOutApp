@@ -13,6 +13,7 @@ import edu.mirea.onebeattrue.hangoutapp.domain.auth.usecases.LogOutUseCase
 import edu.mirea.onebeattrue.hangoutapp.domain.auth.usecases.SignUpUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,25 +26,20 @@ class AuthViewModel @Inject constructor(
     val currentUser: FirebaseUser?
         get() = repository.currentUser
 
-    private var _isUsernameError = MutableLiveData<Boolean>()
-    val isUsernameError: LiveData<Boolean>
-        get() = _isUsernameError
+    private val _isUsernameError = MutableStateFlow<Boolean>(false)
+    val isUsernameError = _isUsernameError.asStateFlow()
 
-    private var _isEmailError = MutableLiveData<Boolean>()
-    val isEmailError: LiveData<Boolean>
-        get() = _isEmailError
+    private val _isEmailError = MutableStateFlow<Boolean>(false)
+    val isEmailError = _isEmailError.asStateFlow()
 
-    private var _isPasswordError = MutableLiveData<Boolean>()
-    val isPasswordError: LiveData<Boolean>
-        get() = _isPasswordError
+    private val _isPasswordError = MutableStateFlow<Boolean>(false)
+    val isPasswordError = _isPasswordError.asStateFlow()
 
     private val _loginFlow = MutableStateFlow<Resource<FirebaseUser>?>(null)
-    val loginFlow: StateFlow<Resource<FirebaseUser>?>
-        get() = _loginFlow
+    val loginFlow = _loginFlow.asStateFlow()
 
     private val _signupFlow = MutableStateFlow<Resource<FirebaseUser>?>(null)
-    val signupFlow: StateFlow<Resource<FirebaseUser>?>
-        get() = _signupFlow
+    val signupFlow = _signupFlow.asStateFlow()
 
     init {
         if (repository.currentUser != null) {
