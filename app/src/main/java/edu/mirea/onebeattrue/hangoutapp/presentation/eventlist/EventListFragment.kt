@@ -17,7 +17,6 @@ import edu.mirea.onebeattrue.hangoutapp.databinding.FragmentEventListBinding
 import edu.mirea.onebeattrue.hangoutapp.domain.eventlist.entities.EventItem
 import edu.mirea.onebeattrue.hangoutapp.presentation.HangOutApplication
 import edu.mirea.onebeattrue.hangoutapp.presentation.ViewModelFactory
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -74,7 +73,7 @@ class EventListFragment : Fragment() {
     private fun observeViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.list.collect {
+                viewModel.listFlow.collect {
                     adapter.submitList(it)
                 }
             }

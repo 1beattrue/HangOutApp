@@ -20,7 +20,7 @@ class EventListViewModel @Inject constructor(
     private val getEventList: GetEventList
 ) : ViewModel() {
 
-    val list: Flow<List<EventItem>> = getEventList()
+    val listFlow: Flow<List<EventItem>> = getEventList()
 
     fun addEvent(eventItem: EventItem) {
         viewModelScope.launch(Dispatchers.IO) {
