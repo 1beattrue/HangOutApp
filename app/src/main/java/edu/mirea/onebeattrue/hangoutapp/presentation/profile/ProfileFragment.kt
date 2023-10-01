@@ -10,10 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import edu.mirea.onebeattrue.hangoutapp.databinding.FragmentProfileBinding
-import edu.mirea.onebeattrue.hangoutapp.di.DaggerComponent
+import edu.mirea.onebeattrue.hangoutapp.presentation.HangOutApplication
 import edu.mirea.onebeattrue.hangoutapp.presentation.ViewModelFactory
 import edu.mirea.onebeattrue.hangoutapp.presentation.auth.AuthViewModel
-import edu.mirea.onebeattrue.hangoutapp.presentation.auth.RegisterFragmentDirections
 import javax.inject.Inject
 
 class ProfileFragment: Fragment() {
@@ -23,7 +22,9 @@ class ProfileFragment: Fragment() {
         ViewModelProvider(this, viewModelFactory)[AuthViewModel::class.java]
     }
 
-    private val component = DaggerComponent.create()
+    private val component by lazy {
+        (requireActivity().application as HangOutApplication).component
+    }
 
     private var _binding: FragmentProfileBinding? = null
     private val binding: FragmentProfileBinding
